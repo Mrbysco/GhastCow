@@ -46,6 +46,8 @@ import net.minecraft.world.IServerWorld;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerBossInfo;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -53,6 +55,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
+@OnlyIn(
+		value = Dist.CLIENT,
+		_interface = IChargeableMob.class
+)
 public class GhastCowEntity extends FlyingMonster implements IChargeableMob, IRangedAttackMob {
 	private static final DataParameter<Boolean> ATTACKING = EntityDataManager.defineId(GhastCowEntity.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> INVULNERABILITY_TIME = EntityDataManager.defineId(GhastCowEntity.class, DataSerializers.INT);
