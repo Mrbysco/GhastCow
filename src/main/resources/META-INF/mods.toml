@@ -1,0 +1,20 @@
+modLoader="javafml"
+loaderVersion="[35,)"
+issueTrackerURL="https://github.com/Mrbysco/GhastCow/issues"
+license="MIT"
+
+[[mods]]
+modId="ghastcow"
+version="${file.jarVersion}"
+displayName="The Ghast Cow mod"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/the-ghast-cow"
+authors="Mrbysco"
+description='''
+Just a simple Ghast Cow boss
+'''
+[[dependencies.ghastcow]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.16.4,1.17)"
+ordering="NONE"
+side="BOTH"
