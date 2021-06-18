@@ -1,5 +1,6 @@
 package com.mrbysco.ghastcow.handler;
 
+import com.mrbysco.ghastcow.config.GhowConfig;
 import com.mrbysco.ghastcow.entity.GhastCowEntity;
 import com.mrbysco.ghastcow.registry.ModEntities;
 import net.minecraft.entity.Entity;
@@ -20,16 +21,15 @@ public class SpawnHandler {
 	public void onDeath(LivingDeathEvent event) {
 		LivingEntity livingEntity = event.getEntityLiving();
 		World level = livingEntity.getCommandSenderWorld();
-		if(!level.isClientSide && level != null) {
+		if(level != null && !level.isClientSide) {
 			DamageSource source = event.getSource();
 			Entity sourceEntity = source.getDirectEntity();
 			if(sourceEntity instanceof FireballEntity) {
 				FireballEntity fireball = (FireballEntity) sourceEntity;
 				if(fireball.getOwner() instanceof GhastEntity && livingEntity instanceof CowEntity) {
 					CowEntity cowEntity = (CowEntity) livingEntity;
-					System.out.println(cowEntity);
-					if(cowEntity.hasCustomName() && cowEntity.getCustomName() != null && cowEntity.getCustomName().getString().toLowerCase(Locale.ROOT).equals("ghast")) {
-						System.out.println("Found custom name");
+					if(!GhowConfig.COMMON.requireNamed.get() ||
+							(cowEntity.hasCustomName() && cowEntity.getCustomName() != null && cowEntity.getCustomName().getString().toLowerCase(Locale.ROOT).equals("ghast"))) {
 						BlockPos blockpos = cowEntity.blockPosition();
 						GhastCowEntity ghastCowEntity = ModEntities.GHAST_COW.get().create(level);
 						if(ghastCowEntity != null) {
