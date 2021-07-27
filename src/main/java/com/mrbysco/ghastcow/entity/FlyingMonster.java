@@ -1,15 +1,15 @@
 package com.mrbysco.ghastcow.entity;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MoverType;
-import net.minecraft.entity.monster.MonsterEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
-public abstract class FlyingMonster extends MonsterEntity {
-	protected FlyingMonster(EntityType<? extends FlyingMonster> type, World level) {
+public abstract class FlyingMonster extends Monster {
+	protected FlyingMonster(EntityType<? extends FlyingMonster> type, Level level) {
 		super(type, level);
 	}
 
@@ -20,7 +20,7 @@ public abstract class FlyingMonster extends MonsterEntity {
 	protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
 	}
 
-	public void travel(Vector3d travelVector) {
+	public void travel(Vec3 travelVector) {
 		if (this.isInWater()) {
 			this.moveRelative(0.02F, travelVector);
 			this.move(MoverType.SELF, this.getDeltaMovement());
@@ -33,13 +33,13 @@ public abstract class FlyingMonster extends MonsterEntity {
 			BlockPos ground = new BlockPos(this.getX(), this.getY() - 1.0D, this.getZ());
 			float f = 0.91F;
 			if (this.onGround) {
-				f = this.level.getBlockState(ground).getSlipperiness(this.level, ground, this) * 0.91F;
+				f = this.level.getBlockState(ground).getFriction(this.level, ground, this) * 0.91F;
 			}
 
 			float f1 = 0.16277137F / (f * f * f);
 			f = 0.91F;
 			if (this.onGround) {
-				f = this.level.getBlockState(ground).getSlipperiness(this.level, ground, this) * 0.91F;
+				f = this.level.getBlockState(ground).getFriction(this.level, ground, this) * 0.91F;
 			}
 
 			this.moveRelative(this.onGround ? 0.1F * f1 : 0.02F, travelVector);

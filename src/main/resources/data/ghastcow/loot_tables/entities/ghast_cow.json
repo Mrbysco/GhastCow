@@ -4,6 +4,7 @@
     {
       "name": "leather",
       "rolls": 1,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
@@ -31,6 +32,7 @@
     {
       "name": "beef",
       "rolls": 1,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",
@@ -58,6 +60,7 @@
     {
       "name": "gunpowder",
       "rolls": 1,
+      "bonus_rolls": 0.0,
       "entries": [
         {
           "type": "minecraft:item",

@@ -1,16 +1,16 @@
 package com.mrbysco.ghastcow.handler;
 
 import com.mrbysco.ghastcow.config.GhowConfig;
-import com.mrbysco.ghastcow.entity.GhastCowEntity;
+import com.mrbysco.ghastcow.entity.GhastCow;
 import com.mrbysco.ghastcow.registry.ModEntities;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.GhastEntity;
-import net.minecraft.entity.passive.CowEntity;
-import net.minecraft.entity.projectile.FireballEntity;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Cow;
+import net.minecraft.world.entity.monster.Ghast;
+import net.minecraft.world.entity.projectile.LargeFireball;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -20,20 +20,18 @@ public class SpawnHandler {
 	@SubscribeEvent
 	public void onDeath(LivingDeathEvent event) {
 		LivingEntity livingEntity = event.getEntityLiving();
-		World level = livingEntity.getCommandSenderWorld();
+		Level level = livingEntity.getCommandSenderWorld();
 		if(level != null && !level.isClientSide) {
 			DamageSource source = event.getSource();
-			Entity sourceEntity = source.getDirectEntity();
-			if(sourceEntity instanceof FireballEntity) {
-				FireballEntity fireball = (FireballEntity) sourceEntity;
-				if(fireball.getOwner() instanceof GhastEntity && livingEntity instanceof CowEntity) {
-					CowEntity cowEntity = (CowEntity) livingEntity;
+			Entity directEntity = source.getDirectEntity();
+			if(directEntity instanceof LargeFireball fireball) {
+				if(fireball.getOwner() instanceof Ghast && livingEntity instanceof Cow cowEntity) {
 					if(!GhowConfig.COMMON.requireNamed.get() ||
 							(cowEntity.hasCustomName() && cowEntity.getCustomName() != null && cowEntity.getCustomName().getString().toLowerCase(Locale.ROOT).equals("ghast"))) {
 						BlockPos blockpos = cowEntity.blockPosition();
-						GhastCowEntity ghastCowEntity = ModEntities.GHAST_COW.get().create(level);
+						GhastCow ghastCowEntity = ModEntities.GHAST_COW.get().create(level);
 						if(ghastCowEntity != null) {
-							ghastCowEntity.moveTo((double)blockpos.getX() + 0.5D, (double)blockpos.getY() + 1.55D, (double)blockpos.getZ() + 0.5D, cowEntity.yRot, cowEntity.xRot);
+							ghastCowEntity.moveTo((double)blockpos.getX() + 0.5D, (double)blockpos.getY() + 1.55D, (double)blockpos.getZ() + 0.5D, cowEntity.getYRot(), cowEntity.getXRot());
 							ghastCowEntity.yBodyRot = cowEntity.yBodyRot;
 
 							level.addFreshEntity(ghastCowEntity);
