@@ -16,8 +16,8 @@ public class ModEntities {
 	public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, GhastCowMod.MOD_ID);
 
 	public static final RegistryObject<EntityType<GhastCowEntity>> GHAST_COW = ENTITIES.register("ghast_cow", () ->
-			register("fairy", EntityType.Builder.<GhastCowEntity>of(GhastCowEntity::new, EntityClassification.MONSTER)
-					.sized(0.5F, 0.5F).clientTrackingRange(10)));
+			register("ghast_cow", EntityType.Builder.<GhastCowEntity>of(GhastCowEntity::new, EntityClassification.MONSTER)
+					.sized(2.5F, 1.5F).clientTrackingRange(10)));
 
 	public static <T extends Entity> EntityType<T> register(String id, EntityType.Builder<T> builder) {
 		return builder.build(id);
