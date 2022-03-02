@@ -197,7 +197,7 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 				this.nextUpdate = this.tickCount + 10 + this.random.nextInt(10);
 				if (this.level.getDifficulty() == Difficulty.NORMAL || this.level.getDifficulty() == Difficulty.HARD) {
 					int idleHeadUpdates = idleUpdate;
-					idleUpdate = idleUpdate++;
+					this.idleUpdate++;
 					if (idleHeadUpdates > 15) {
 						float f = 10.0F;
 						float f1 = 5.0F;
