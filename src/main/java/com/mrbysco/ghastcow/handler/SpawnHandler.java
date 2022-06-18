@@ -21,17 +21,17 @@ public class SpawnHandler {
 	public void onDeath(LivingDeathEvent event) {
 		LivingEntity livingEntity = event.getEntityLiving();
 		Level level = livingEntity.getCommandSenderWorld();
-		if(level != null && !level.isClientSide) {
+		if (level != null && !level.isClientSide) {
 			DamageSource source = event.getSource();
 			Entity directEntity = source.getDirectEntity();
-			if(directEntity instanceof LargeFireball fireball) {
-				if(fireball.getOwner() instanceof Ghast && livingEntity instanceof Cow cowEntity) {
-					if(!GhowConfig.COMMON.requireNamed.get() ||
+			if (directEntity instanceof LargeFireball fireball) {
+				if (fireball.getOwner() instanceof Ghast && livingEntity instanceof Cow cowEntity) {
+					if (!GhowConfig.COMMON.requireNamed.get() ||
 							(cowEntity.hasCustomName() && cowEntity.getCustomName() != null && cowEntity.getCustomName().getString().toLowerCase(Locale.ROOT).equals("ghast"))) {
 						BlockPos blockpos = cowEntity.blockPosition();
 						GhastCow ghastCowEntity = ModEntities.GHAST_COW.get().create(level);
-						if(ghastCowEntity != null) {
-							ghastCowEntity.moveTo((double)blockpos.getX() + 0.5D, (double)blockpos.getY() + 1.55D, (double)blockpos.getZ() + 0.5D, cowEntity.getYRot(), cowEntity.getXRot());
+						if (ghastCowEntity != null) {
+							ghastCowEntity.moveTo((double) blockpos.getX() + 0.5D, (double) blockpos.getY() + 1.55D, (double) blockpos.getZ() + 0.5D, cowEntity.getYRot(), cowEntity.getXRot());
 							ghastCowEntity.yBodyRot = cowEntity.yBodyRot;
 
 							level.addFreshEntity(ghastCowEntity);

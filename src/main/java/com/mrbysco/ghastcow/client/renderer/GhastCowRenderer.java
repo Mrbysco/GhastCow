@@ -35,7 +35,7 @@ public class GhastCowRenderer extends MobRenderer<GhastCow, GhastCowModel<GhastC
 		float f = 2.5F;
 		int i = ghastCowEntity.getInvulTime();
 		if (i > 0) {
-			f -= ((float)i - partialTickTime) / 220.0F * 0.5F;
+			f -= ((float) i - partialTickTime) / 220.0F * 0.5F;
 		}
 
 		matrixStackIn.scale(f, f, f);

@@ -26,7 +26,7 @@ public class GhastCowModel<T extends Entity> extends HierarchicalModel<T> {
 		this.head = part.getChild("head");
 		this.body = part.getChild("body");
 
-		for(int i = 0; i < this.tentacles.length; ++i) {
+		for (int i = 0; i < this.tentacles.length; ++i) {
 			this.tentacles[i] = part.getChild(createTentacleName(i));
 		}
 	}
@@ -51,12 +51,12 @@ public class GhastCowModel<T extends Entity> extends HierarchicalModel<T> {
 
 		Random random = new Random(1660L);
 
-		for(int i = 0; i < 9; ++i) {
-			float f = (((float)(i % 3) - (float)(i / 3 % 2) * 0.5F + 0.25F) / 2.0F * 2.0F - 1.0F) * 5.0F;
-			float f1 = ((float)(i / 3) / 2.0F * 2.0F - 1.0F) * 5.0F;
+		for (int i = 0; i < 9; ++i) {
+			float f = (((float) (i % 3) - (float) (i / 3 % 2) * 0.5F + 0.25F) / 2.0F * 2.0F - 1.0F) * 5.0F;
+			float f1 = ((float) (i / 3) / 2.0F * 2.0F - 1.0F) * 5.0F;
 			int j = random.nextInt(7) + 8;
 			partdefinition.addOrReplaceChild(createTentacleName(i), CubeListBuilder.create()
-					.texOffs(2, 18).addBox(-1.0F, 0.0F, -1.0F, 2.0F, (float)j, 2.0F),
+							.texOffs(2, 18).addBox(-1.0F, 0.0F, -1.0F, 2.0F, (float) j, 2.0F),
 					PartPose.offset(f, 24.6F, f1));
 		}
 
@@ -74,9 +74,9 @@ public class GhastCowModel<T extends Entity> extends HierarchicalModel<T> {
 	}
 
 	@Override
-	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch){
-		for(int i = 0; i < this.tentacles.length; ++i) {
-			this.tentacles[i].xRot = 0.2F * Mth.sin(ageInTicks * 0.3F + (float)i) + 0.4F;
+	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+		for (int i = 0; i < this.tentacles.length; ++i) {
+			this.tentacles[i].xRot = 0.2F * Mth.sin(ageInTicks * 0.3F + (float) i) + 0.4F;
 		}
 	}
 

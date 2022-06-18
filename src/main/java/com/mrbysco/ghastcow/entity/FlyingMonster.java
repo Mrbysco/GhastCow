@@ -24,7 +24,7 @@ public abstract class FlyingMonster extends Monster {
 		if (this.isInWater()) {
 			this.moveRelative(0.02F, travelVector);
 			this.move(MoverType.SELF, this.getDeltaMovement());
-			this.setDeltaMovement(this.getDeltaMovement().scale((double)0.8F));
+			this.setDeltaMovement(this.getDeltaMovement().scale((double) 0.8F));
 		} else if (this.isInLava()) {
 			this.moveRelative(0.02F, travelVector);
 			this.move(MoverType.SELF, this.getDeltaMovement());
@@ -44,7 +44,7 @@ public abstract class FlyingMonster extends Monster {
 
 			this.moveRelative(this.onGround ? 0.1F * f1 : 0.02F, travelVector);
 			this.move(MoverType.SELF, this.getDeltaMovement());
-			this.setDeltaMovement(this.getDeltaMovement().scale((double)f));
+			this.setDeltaMovement(this.getDeltaMovement().scale((double) f));
 		}
 
 		this.calculateEntityAnimation(this, false);

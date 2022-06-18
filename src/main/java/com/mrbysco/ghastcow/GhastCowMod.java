@@ -18,28 +18,28 @@ import org.slf4j.Logger;
 
 @Mod(GhastCowMod.MOD_ID)
 public class GhastCowMod {
-    public static final String MOD_ID = "ghastcow";
-    public static final Logger LOGGER = LogUtils.getLogger();
+	public static final String MOD_ID = "ghastcow";
+	public static final Logger LOGGER = LogUtils.getLogger();
 
-    public GhastCowMod() {
-        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GhowConfig.serverSpec);
-        eventBus.register(GhowConfig.class);
+	public GhastCowMod() {
+		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GhowConfig.serverSpec);
+		eventBus.register(GhowConfig.class);
 
-        eventBus.addListener(this::setup);
-        eventBus.addListener(ModEntities::registerEntityAttributes);
+		eventBus.addListener(this::setup);
+		eventBus.addListener(ModEntities::registerEntityAttributes);
 
-        MinecraftForge.EVENT_BUS.register(new SpawnHandler());
+		MinecraftForge.EVENT_BUS.register(new SpawnHandler());
 
-        ModEntities.ENTITIES.register(eventBus);
+		ModEntities.ENTITIES.register(eventBus);
 
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-            eventBus.addListener(ClientHandler::registerEntityRenders);
-            eventBus.addListener(ClientHandler::registerLayerDefinitions);
-        });
-    }
+		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+			eventBus.addListener(ClientHandler::registerEntityRenders);
+			eventBus.addListener(ClientHandler::registerLayerDefinitions);
+		});
+	}
 
-    private void setup(final FMLCommonSetupEvent event) {
-        ModEntities.registerSpawnPlacement();
-    }
+	private void setup(final FMLCommonSetupEvent event) {
+		ModEntities.registerSpawnPlacement();
+	}
 }
