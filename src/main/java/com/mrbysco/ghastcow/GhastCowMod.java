@@ -31,7 +31,7 @@ public class GhastCowMod {
 
 		MinecraftForge.EVENT_BUS.register(new SpawnHandler());
 
-		ModEntities.ENTITIES.register(eventBus);
+		ModEntities.ENTITY_TYPES.register(eventBus);
 
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
 			eventBus.addListener(ClientHandler::registerEntityRenders);

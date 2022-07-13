@@ -13,9 +13,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class ModEntities {
-	public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, GhastCowMod.MOD_ID);
+	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, GhastCowMod.MOD_ID);
 
-	public static final RegistryObject<EntityType<GhastCow>> GHAST_COW = ENTITIES.register("ghast_cow", () ->
+	public static final RegistryObject<EntityType<GhastCow>> GHAST_COW = ENTITY_TYPES.register("ghast_cow", () ->
 			register("ghast_cow", EntityType.Builder.<GhastCow>of(GhastCow::new, MobCategory.MONSTER)
 					.sized(2.5F, 1.5F).clientTrackingRange(10)));
 

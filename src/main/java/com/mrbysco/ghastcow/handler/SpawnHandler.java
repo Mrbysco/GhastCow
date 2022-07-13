@@ -19,10 +19,10 @@ import java.util.Locale;
 public class SpawnHandler {
 	@SubscribeEvent
 	public void onDeath(LivingDeathEvent event) {
-		LivingEntity livingEntity = event.getEntityLiving();
-		Level level = livingEntity.getCommandSenderWorld();
+		final LivingEntity livingEntity = event.getEntity();
+		final Level level = livingEntity.getCommandSenderWorld();
 		if (level != null && !level.isClientSide) {
-			DamageSource source = event.getSource();
+			final DamageSource source = event.getSource();
 			Entity directEntity = source.getDirectEntity();
 			if (directEntity instanceof LargeFireball fireball) {
 				if (fireball.getOwner() instanceof Ghast && livingEntity instanceof Cow cowEntity) {
