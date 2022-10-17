@@ -1,3 +1,5 @@
+[![build](https://github.com/Mrbysco/GhastCow/actions/workflows/build.yml/badge.svg)](https://github.com/Mrbysco/GhastCow/actions/workflows/build.yml) 
+[![](http://cf.way2muchnoise.eu/versions/483348.svg)](https://www.curseforge.com/minecraft/mc-mods/the-ghast-cow)
 # The Ghast Cow Mod #
 
 ## About ##
