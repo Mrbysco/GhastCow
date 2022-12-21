@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[43,)"
+loaderVersion="[44,)"
 issueTrackerURL="https://github.com/Mrbysco/GhastCow/issues"
 license="MIT"
 
@@ -15,12 +15,6 @@ Just a simple Ghast Cow boss
 [[dependencies.ghastcow]]
 modId="minecraft"
 mandatory=true
-versionRange="[1.19.2,1.20)"
-ordering="NONE"
-side="BOTH"
-[[dependencies.ghastcow]]
-modId="forge"
-mandatory=true
-versionRange="[43.1.42,)"
+versionRange="[1.19.3,1.20)"
 ordering="NONE"
 side="BOTH"

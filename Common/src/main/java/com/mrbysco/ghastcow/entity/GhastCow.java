@@ -179,7 +179,8 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 		if (this.getInvulTime() > 0) {
 			int j1 = this.getInvulTime() - 1;
 			if (j1 <= 0) {
-				Explosion.BlockInteraction explosion$mode = Services.PLATFORM.cancelMobGriefing(this.level, this) ? Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.NONE;
+				Level.ExplosionInteraction explosion$mode = Services.PLATFORM.cancelMobGriefing(this.level, this) ?
+						Level.ExplosionInteraction.MOB : Level.ExplosionInteraction.NONE;
 				this.level.explode(this, this.getX(), this.getEyeY(), this.getZ(), 7.0F, false, explosion$mode);
 				if (!this.isSilent()) {
 					this.level.playSound(null, this.blockPosition(), SoundEvents.GHAST_SCREAM, getSoundCategory(), getSoundVolume(), 1.0F);

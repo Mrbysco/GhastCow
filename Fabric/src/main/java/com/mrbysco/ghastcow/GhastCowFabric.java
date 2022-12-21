@@ -9,6 +9,7 @@ import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
@@ -24,7 +25,7 @@ public class GhastCowFabric implements ModInitializer {
 	public void onInitialize() {
 		config = AutoConfig.register(GhowConfigFabric.class, Toml4jConfigSerializer::new);
 
-		Registry.register(Registry.ENTITY_TYPE, new ResourceLocation(Constants.MOD_ID, "ghast_cow"), GHAST_COW);
+		Registry.register(BuiltInRegistries.ENTITY_TYPE, new ResourceLocation(Constants.MOD_ID, "ghast_cow"), GHAST_COW);
 		FabricDefaultAttributeRegistry.register(GHAST_COW, GhastCow.generateAttributes());
 
 		LivingDeathCallback.EVENT.register((living, source) -> {
