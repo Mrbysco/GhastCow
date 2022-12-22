@@ -21,6 +21,8 @@ public class GhastCowForge {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GhowConfig.commonSpec);
 		eventBus.register(GhowConfig.class);
 
+		ModEntities.ENTITY_TYPES.register(eventBus);
+
 		eventBus.addListener(ModEntities::registerSpawnPlacements);
 		eventBus.addListener(ModEntities::registerEntityAttributes);
 

@@ -2,7 +2,6 @@ package com.mrbysco.ghastcow.registry;
 
 import com.mrbysco.ghastcow.Constants;
 import com.mrbysco.ghastcow.entity.GhastCow;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.SpawnPlacements;
@@ -17,12 +16,8 @@ public class ModEntities {
 	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Constants.MOD_ID);
 
 	public static final RegistryObject<EntityType<GhastCow>> GHAST_COW = ENTITY_TYPES.register("ghast_cow", () ->
-			register("ghast_cow", EntityType.Builder.<GhastCow>of(GhastCow::new, MobCategory.MONSTER)
-					.sized(2.5F, 1.5F).clientTrackingRange(10)));
-
-	public static <T extends Entity> EntityType<T> register(String id, EntityType.Builder<T> builder) {
-		return builder.build(id);
-	}
+			EntityType.Builder.<GhastCow>of(GhastCow::new, MobCategory.MONSTER)
+					.sized(2.5F, 1.5F).clientTrackingRange(10).build("ghast_cow"));
 
 	public static void registerSpawnPlacements(final SpawnPlacementRegisterEvent event) {
 		event.register(ModEntities.GHAST_COW.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, GhastCow::canSpawnHere, SpawnPlacementRegisterEvent.Operation.OR);
