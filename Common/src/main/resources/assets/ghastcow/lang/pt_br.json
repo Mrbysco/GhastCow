@@ -1,0 +1,7 @@
+{
+    "entity.ghastcow.ghast_cow": "A Vaca Fantasma",
+  
+    "text.autoconfig.ghastcow.title": "Em geral",
+    "text.autoconfig.ghastcow.option.general": "Em geral",
+    "text.autoconfig.ghastcow.option.general.requireNamed": "Exigir nome"
+  }
