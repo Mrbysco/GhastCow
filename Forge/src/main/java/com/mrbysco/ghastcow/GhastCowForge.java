@@ -2,7 +2,7 @@ package com.mrbysco.ghastcow;
 
 import com.mrbysco.ghastcow.client.ClientHandler;
 import com.mrbysco.ghastcow.config.GhowConfig;
-import com.mrbysco.ghastcow.registry.ModEntities;
+import com.mrbysco.ghastcow.registry.ModSetup;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -21,10 +21,10 @@ public class GhastCowForge {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GhowConfig.commonSpec);
 		eventBus.register(GhowConfig.class);
 
-		ModEntities.ENTITY_TYPES.register(eventBus);
+		CommonClass.init();
 
-		eventBus.addListener(ModEntities::registerSpawnPlacements);
-		eventBus.addListener(ModEntities::registerEntityAttributes);
+		eventBus.addListener(ModSetup::registerSpawnPlacements);
+		eventBus.addListener(ModSetup::registerEntityAttributes);
 
 		MinecraftForge.EVENT_BUS.addListener(this::onDeath);
 

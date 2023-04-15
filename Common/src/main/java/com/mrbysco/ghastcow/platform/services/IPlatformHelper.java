@@ -24,9 +24,4 @@ public interface IPlatformHelper {
 	 * @return the configured option for `requireNamed`
 	 */
 	boolean requiresName();
-
-	/**
-	 * @return the Ghast Cow EntityType
-	 */
-	EntityType<GhastCow> getEntityType();
 }
