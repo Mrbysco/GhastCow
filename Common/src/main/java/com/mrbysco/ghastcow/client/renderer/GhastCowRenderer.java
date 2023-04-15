@@ -26,14 +26,14 @@ public class GhastCowRenderer extends MobRenderer<GhastCow, GhastCowModel<GhastC
 
 	@Override
 	public ResourceLocation getTextureLocation(GhastCow ghastCow) {
-		int i = ghastCow.getInvulTime();
+		int i = ghastCow.getInvulnerableTicks();
 		return i > 0 && (i > 80 || i / 5 % 2 != 1) ? INVULNERABLE_GHASTCOW_TEXTURES : ghastCow.isAttacking() ? GHASTCOW_SHOOTING_TEXTURES : GHASTCOW_TEXTURES;
 	}
 
 	@Override
 	protected void scale(GhastCow ghastCowEntity, PoseStack matrixStackIn, float partialTickTime) {
 		float f = 2.5F;
-		int i = ghastCowEntity.getInvulTime();
+		int i = ghastCowEntity.getInvulnerableTicks();
 		if (i > 0) {
 			f -= ((float) i - partialTickTime) / 220.0F * 0.5F;
 		}

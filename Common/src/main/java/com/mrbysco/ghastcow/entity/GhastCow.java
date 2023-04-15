@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.BossEvent;
@@ -38,6 +39,7 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Cow;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
@@ -100,7 +102,7 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 		this.entityData.set(ATTACKING, attacking);
 	}
 
-	public int getInvulTime() {
+	public int getInvulnerableTicks() {
 		return this.entityData.get(INVULNERABILITY_TIME);
 	}
 
@@ -166,7 +168,7 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 			this.level.addParticle(ParticleTypes.ENTITY_EFFECT, d8 + this.random.nextGaussian() * (double) 0.3F, d10 + this.random.nextGaussian() * (double) 0.3F, d2 + this.random.nextGaussian() * (double) 0.3F, (double) 0.7F, (double) 0.7F, 0.5D);
 		}
 
-		if (this.getInvulTime() > 0) {
+		if (this.getInvulnerableTicks() > 0) {
 			for (int i1 = 0; i1 < 3; ++i1) {
 				this.level.addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() + this.random.nextGaussian(), this.getY() + (double) (this.random.nextFloat() * 3.3F), this.getZ() + this.random.nextGaussian(), (double) 0.7F, (double) 0.7F, (double) 0.9F);
 			}
@@ -175,8 +177,8 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 
 	@Override
 	protected void customServerAiStep() {
-		if (this.getInvulTime() > 0) {
-			int j1 = this.getInvulTime() - 1;
+		if (this.getInvulnerableTicks() > 0) {
+			int j1 = this.getInvulnerableTicks() - 1;
 			if (j1 <= 0) {
 				Level.ExplosionInteraction explosion$mode = Services.PLATFORM.cancelMobGriefing(this.level, this) ?
 						Level.ExplosionInteraction.MOB : Level.ExplosionInteraction.NONE;
@@ -310,8 +312,8 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 	public boolean hurt(DamageSource source, float amount) {
 		if (this.isInvulnerableTo(source)) {
 			return false;
-		} else if (source != DamageSource.DROWN && !(source.getEntity() instanceof GhastCow)) {
-			if (this.getInvulTime() > 0 && source != DamageSource.OUT_OF_WORLD) {
+		} else if (!source.is(DamageTypeTags.WITHER_IMMUNE_TO) && !(source.getEntity() instanceof WitherBoss)) {
+			if (this.getInvulnerableTicks() > 0 && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
 				return false;
 			} else {
 				if (this.isPowered()) {
@@ -388,7 +390,7 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 		 * method as well.
 		 */
 		public boolean canUse() {
-			return GhastCow.this.getInvulTime() > 0;
+			return GhastCow.this.getInvulnerableTicks() > 0;
 		}
 	}
 }

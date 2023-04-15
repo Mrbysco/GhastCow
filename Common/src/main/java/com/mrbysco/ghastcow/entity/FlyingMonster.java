@@ -32,7 +32,7 @@ public abstract class FlyingMonster extends Monster {
 			this.move(MoverType.SELF, this.getDeltaMovement());
 			this.setDeltaMovement(this.getDeltaMovement().scale(0.5D));
 		} else {
-			BlockPos ground = new BlockPos(this.getX(), this.getY() - 1.0D, this.getZ());
+			BlockPos ground = BlockPos.containing(this.getX(), this.getY() - 1.0D, this.getZ());
 			float f = 0.91F;
 			if (this.onGround) {
 				f = Services.PLATFORM.getBlockFriction(this.level, ground, this) * 0.91F;
@@ -49,7 +49,7 @@ public abstract class FlyingMonster extends Monster {
 			this.setDeltaMovement(this.getDeltaMovement().scale((double) f));
 		}
 
-		this.calculateEntityAnimation(this, false);
+		this.calculateEntityAnimation(false);
 	}
 
 	/**
