@@ -133,8 +133,8 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 
 	public void aiStep() {
 		Vec3 vec3 = this.getDeltaMovement().multiply(1.0D, 0.6D, 1.0D);
-		if (!this.level.isClientSide && this.getTargetID() > 0) {
-			Entity entity = this.level.getEntity(this.getTargetID());
+		if (!this.level().isClientSide && this.getTargetID() > 0) {
+			Entity entity = this.level().getEntity(this.getTargetID());
 			if (entity != null) {
 				double d0 = vec3.y;
 				if (this.getY() < entity.getY() || !this.isPowered() && this.getY() < entity.getY() + 5.0D) {
@@ -163,14 +163,14 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 		double d8 = this.getX();
 		double d10 = this.getY();
 		double d2 = this.getZ();
-		this.level.addParticle(ParticleTypes.POOF, d8 + this.random.nextGaussian() * (double) 0.3F, d10 + this.random.nextGaussian() * (double) 0.3F, d2 + this.random.nextGaussian() * (double) 0.3F, 0.0D, 0.0D, 0.0D);
-		if (flag && this.level.random.nextInt(4) == 0) {
-			this.level.addParticle(ParticleTypes.ENTITY_EFFECT, d8 + this.random.nextGaussian() * (double) 0.3F, d10 + this.random.nextGaussian() * (double) 0.3F, d2 + this.random.nextGaussian() * (double) 0.3F, (double) 0.7F, (double) 0.7F, 0.5D);
+		this.level().addParticle(ParticleTypes.POOF, d8 + this.random.nextGaussian() * (double) 0.3F, d10 + this.random.nextGaussian() * (double) 0.3F, d2 + this.random.nextGaussian() * (double) 0.3F, 0.0D, 0.0D, 0.0D);
+		if (flag && this.level().random.nextInt(4) == 0) {
+			this.level().addParticle(ParticleTypes.ENTITY_EFFECT, d8 + this.random.nextGaussian() * (double) 0.3F, d10 + this.random.nextGaussian() * (double) 0.3F, d2 + this.random.nextGaussian() * (double) 0.3F, (double) 0.7F, (double) 0.7F, 0.5D);
 		}
 
 		if (this.getInvulnerableTicks() > 0) {
 			for (int i1 = 0; i1 < 3; ++i1) {
-				this.level.addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() + this.random.nextGaussian(), this.getY() + (double) (this.random.nextFloat() * 3.3F), this.getZ() + this.random.nextGaussian(), (double) 0.7F, (double) 0.7F, (double) 0.9F);
+				this.level().addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() + this.random.nextGaussian(), this.getY() + (double) (this.random.nextFloat() * 3.3F), this.getZ() + this.random.nextGaussian(), (double) 0.7F, (double) 0.7F, (double) 0.9F);
 			}
 		}
 	}
@@ -180,11 +180,11 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 		if (this.getInvulnerableTicks() > 0) {
 			int j1 = this.getInvulnerableTicks() - 1;
 			if (j1 <= 0) {
-				Level.ExplosionInteraction explosion$mode = Services.PLATFORM.cancelMobGriefing(this.level, this) ?
+				Level.ExplosionInteraction explosion$mode = Services.PLATFORM.cancelMobGriefing(this.level(), this) ?
 						Level.ExplosionInteraction.MOB : Level.ExplosionInteraction.NONE;
-				this.level.explode(this, this.getX(), this.getEyeY(), this.getZ(), 7.0F, false, explosion$mode);
+				this.level().explode(this, this.getX(), this.getEyeY(), this.getZ(), 7.0F, false, explosion$mode);
 				if (!this.isSilent()) {
-					this.level.playSound(null, this.blockPosition(), SoundEvents.GHAST_SCREAM, getSoundCategory(), getSoundVolume(), 1.0F);
+					this.level().playSound(null, this.blockPosition(), SoundEvents.GHAST_SCREAM, getSoundCategory(), getSoundVolume(), 1.0F);
 				}
 			}
 
@@ -198,7 +198,7 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 
 			if (this.tickCount >= nextUpdate) {
 				this.nextUpdate = this.tickCount + 10 + this.random.nextInt(10);
-				if (this.level.getDifficulty() == Difficulty.NORMAL || this.level.getDifficulty() == Difficulty.HARD) {
+				if (this.level().getDifficulty() == Difficulty.NORMAL || this.level().getDifficulty() == Difficulty.HARD) {
 					int idleHeadUpdates = idleUpdate;
 					this.idleUpdate++;
 					if (idleHeadUpdates > 15) {
@@ -214,7 +214,7 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 
 				int targetID = this.getTargetID();
 				if (targetID > 0) {
-					Entity entity = this.level.getEntity(targetID);
+					Entity entity = this.level().getEntity(targetID);
 					if (entity != null && entity.isAlive() && !(this.distanceToSqr(entity) > 900.0D) && this.hasLineOfSight(entity)) {
 						if (entity instanceof Player && ((Player) entity).getAbilities().invulnerable) {
 							this.updateTargetID(0);
@@ -227,7 +227,7 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 						this.updateTargetID(0);
 					}
 				} else {
-					List<LivingEntity> list = this.level.getNearbyEntities(LivingEntity.class, ENEMY_CONDITION, this, this.getBoundingBox().inflate(20.0D, 8.0D, 20.0D));
+					List<LivingEntity> list = this.level().getNearbyEntities(LivingEntity.class, ENEMY_CONDITION, this, this.getBoundingBox().inflate(20.0D, 8.0D, 20.0D));
 
 					for (int j2 = 0; j2 < 10 && !list.isEmpty(); ++j2) {
 						LivingEntity livingentity = list.get(this.random.nextInt(list.size()));
@@ -344,7 +344,7 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 	private void launchFireballToCoords(double x, double y, double z, boolean invulnerable) {
 		this.setAttacking(true);
 		if (!this.isSilent()) {
-			this.level.levelEvent((Player) null, 1024, this.blockPosition(), 0);
+			this.level().levelEvent((Player) null, 1024, this.blockPosition(), 0);
 		}
 
 		double d0 = this.getX();
@@ -354,11 +354,11 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 		double d4 = y - d1;
 		double d5 = z - d2;
 
-		LargeFireball fireballentity = new LargeFireball(level, this, d3, d4, d5, 1);
+		LargeFireball fireballentity = new LargeFireball(this.level(), this, d3, d4, d5, 1);
 		fireballentity.setOwner(this);
 
 		fireballentity.setPosRaw(d0, d1, d2);
-		this.level.addFreshEntity(fireballentity);
+		this.level().addFreshEntity(fireballentity);
 		this.setAttacking(false);
 	}
 

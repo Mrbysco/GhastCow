@@ -85,5 +85,6 @@
         }
       ]
     }
-  ]
+  ],
+  "random_sequence": "ghastcow:entities/ghast_cow"
 }
