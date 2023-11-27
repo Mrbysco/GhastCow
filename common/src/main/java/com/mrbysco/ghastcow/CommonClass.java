@@ -20,8 +20,8 @@ public class CommonClass {
 	}
 
 	public static void onDeath(LivingEntity livingEntity, DamageSource source) {
-		final Level level = livingEntity.getCommandSenderWorld();
-		if (level != null && !level.isClientSide) {
+		final Level level = livingEntity.level();
+		if (!level.isClientSide) {
 			Entity directEntity = source.getDirectEntity();
 			if (directEntity instanceof LargeFireball fireball) {
 				if (fireball.getOwner() instanceof Ghast && livingEntity instanceof Cow cowEntity) {

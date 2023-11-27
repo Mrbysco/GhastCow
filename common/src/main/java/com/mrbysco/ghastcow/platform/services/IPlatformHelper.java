@@ -1,9 +1,7 @@
 package com.mrbysco.ghastcow.platform.services;
 
-import com.mrbysco.ghastcow.entity.GhastCow;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 
 public interface IPlatformHelper {

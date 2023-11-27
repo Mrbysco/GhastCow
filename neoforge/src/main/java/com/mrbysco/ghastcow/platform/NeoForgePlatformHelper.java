@@ -5,13 +5,14 @@ import com.mrbysco.ghastcow.platform.services.IPlatformHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.event.EventHooks;
 
-public class ForgePlatformHelper implements IPlatformHelper {
+public class NeoForgePlatformHelper implements IPlatformHelper {
 
 
 	@Override
 	public boolean cancelMobGriefing(Level level, Entity entity) {
-		return net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(level, entity);
+		return EventHooks.getMobGriefingEvent(level, entity);
 	}
 
 	@Override

@@ -354,11 +354,11 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 		double d4 = y - d1;
 		double d5 = z - d2;
 
-		LargeFireball fireballentity = new LargeFireball(this.level(), this, d3, d4, d5, 1);
-		fireballentity.setOwner(this);
+		LargeFireball fireball = new LargeFireball(this.level(), this, d3, d4, d5, 1);
+		fireball.setOwner(this);
 
-		fireballentity.setPosRaw(d0, d1, d2);
-		this.level().addFreshEntity(fireballentity);
+		fireball.setPosRaw(d0, d1, d2);
+		this.level().addFreshEntity(fireball);
 		this.setAttacking(false);
 	}
 
@@ -374,10 +374,10 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 
 	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor levelAccessor, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
 		this.setInvulTime(220);
 		this.setHealth(this.getMaxHealth() / 2.0F);
-		return super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+		return super.finalizeSpawn(levelAccessor, difficultyIn, reason, spawnDataIn, dataTag);
 	}
 
 	class DoNothingGoal extends Goal {
