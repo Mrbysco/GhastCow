@@ -7,7 +7,6 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -15,8 +14,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 @Mod(Constants.MOD_ID)
 public class GhastCowForge {
 
-	public GhastCowForge() {
-		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+	public GhastCowForge(IEventBus eventBus) {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GhowConfig.commonSpec);
 		eventBus.register(GhowConfig.class);
 
