@@ -12,6 +12,6 @@ public class GhastCowFabricClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		EntityModelLayerRegistry.registerModelLayer(ClientClass.GHAST_COW, GhastCowModel::createMesh);
-		EntityRendererRegistry.register(ModEntities.GHAST_COW.get(), (ctx) -> new GhastCowRenderer(ctx));
+		EntityRendererRegistry.register(ModEntities.GHAST_COW.get(), GhastCowRenderer::new);
 	}
 }

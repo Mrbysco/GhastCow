@@ -2,6 +2,7 @@ package com.mrbysco.ghastcow.entity;
 
 import com.mrbysco.ghastcow.platform.Services;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -14,6 +15,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.BossEvent;
@@ -25,7 +27,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.PowerableMob;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -63,7 +64,7 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 	private int idleUpdate = 0;
 
 	private final ServerBossEvent bossInfo = (ServerBossEvent) (new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.WHITE, BossEvent.BossBarOverlay.PROGRESS)).setCreateWorldFog(true);
-	private static final Predicate<LivingEntity> NOT_UNDEAD = (livingEntity) -> livingEntity.getMobType() != MobType.UNDEAD && !(livingEntity instanceof Cow) && livingEntity.attackable();
+	private static final Predicate<LivingEntity> NOT_UNDEAD = (livingEntity) -> !livingEntity.getType().is(EntityTypeTags.UNDEAD) && !(livingEntity instanceof Cow) && livingEntity.attackable();
 	private static final TargetingConditions ENEMY_CONDITION = TargetingConditions.forCombat().range(20.0D).selector(NOT_UNDEAD);
 
 	public GhastCow(EntityType<? extends FlyingMonster> type, Level level) {
@@ -87,11 +88,12 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 		return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 100.0D).add(Attributes.MOVEMENT_SPEED, (double) 0.6F).add(Attributes.FOLLOW_RANGE, 40.0D).add(Attributes.ARMOR, 4.0D);
 	}
 
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(ATTACKING, false);
-		this.entityData.define(TARGET, 0);
-		this.entityData.define(INVULNERABILITY_TIME, 0);
+	@Override
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(ATTACKING, false);
+		builder.define(TARGET, 0);
+		builder.define(INVULNERABILITY_TIME, 0);
 	}
 
 	public boolean isAttacking() {
@@ -165,12 +167,12 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 		double d2 = this.getZ();
 		this.level().addParticle(ParticleTypes.POOF, d8 + this.random.nextGaussian() * (double) 0.3F, d10 + this.random.nextGaussian() * (double) 0.3F, d2 + this.random.nextGaussian() * (double) 0.3F, 0.0D, 0.0D, 0.0D);
 		if (flag && this.level().random.nextInt(4) == 0) {
-			this.level().addParticle(ParticleTypes.ENTITY_EFFECT, d8 + this.random.nextGaussian() * (double) 0.3F, d10 + this.random.nextGaussian() * (double) 0.3F, d2 + this.random.nextGaussian() * (double) 0.3F, (double) 0.7F, (double) 0.7F, 0.5D);
+			this.level().addParticle(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0.7F, 0.7F, 0.5F), d8 + this.random.nextGaussian() * (double) 0.3F, d10 + this.random.nextGaussian() * (double) 0.3F, d2 + this.random.nextGaussian() * (double) 0.3F, 0.0, 0.0, 0.0);
 		}
 
 		if (this.getInvulnerableTicks() > 0) {
 			for (int i1 = 0; i1 < 3; ++i1) {
-				this.level().addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() + this.random.nextGaussian(), this.getY() + (double) (this.random.nextFloat() * 3.3F), this.getZ() + this.random.nextGaussian(), (double) 0.7F, (double) 0.7F, (double) 0.9F);
+				this.level().addParticle(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0.7F, 0.7F, 0.9F), this.getX() + this.random.nextGaussian(), this.getY() + (double) (this.random.nextFloat() * 3.3F), this.getZ() + this.random.nextGaussian(), 0.0, 0.0, 0.0);
 			}
 		}
 	}
@@ -324,7 +326,7 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 				}
 
 				Entity entity1 = source.getEntity();
-				if (entity1 != null && !(entity1 instanceof Player) && entity1 instanceof LivingEntity && ((LivingEntity) entity1).getMobType() == this.getMobType()) {
+				if (entity1 != null && !(entity1 instanceof Player) && entity1 instanceof LivingEntity && entity1.getType().is(EntityTypeTags.UNDEAD)) {
 					return false;
 				} else {
 					this.idleUpdate += 3;
@@ -367,17 +369,12 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 		return this.getHealth() <= this.getMaxHealth() / 2.0F;
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.UNDEAD;
-	}
-
 	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor levelAccessor, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor levelAccessor, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
 		this.setInvulTime(220);
 		this.setHealth(this.getMaxHealth() / 2.0F);
-		return super.finalizeSpawn(levelAccessor, difficultyIn, reason, spawnDataIn, dataTag);
+		return super.finalizeSpawn(levelAccessor, difficultyIn, reason, spawnDataIn);
 	}
 
 	class DoNothingGoal extends Goal {

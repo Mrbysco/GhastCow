@@ -11,6 +11,6 @@ public class ClientHandler {
 	}
 
 	public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
-		event.registerLayerDefinition(ClientClass.GHAST_COW, () -> GhastCowModel.createMesh());
+		event.registerLayerDefinition(ClientClass.GHAST_COW, GhastCowModel::createMesh);
 	}
 }
