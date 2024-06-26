@@ -349,17 +349,15 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 			this.level().levelEvent((Player) null, 1024, this.blockPosition(), 0);
 		}
 
-		double d0 = this.getX();
-		double d1 = this.getY();
-		double d2 = this.getZ();
-		double d3 = x - d0;
-		double d4 = y - d1;
-		double d5 = z - d2;
+		double d1 = x - this.getX();
+		double d2 = y - this.getY();
+		double d3 = z - this.getZ();
+		Vec3 vec3 = new Vec3(d1, d2, d3);
 
-		LargeFireball fireball = new LargeFireball(this.level(), this, d3, d4, d5, 1);
+		LargeFireball fireball = new LargeFireball(this.level(), this, vec3, 1);
 		fireball.setOwner(this);
+		fireball.setPos(this.getX() + vec3.x * 4.0, this.getY(0.5) + 0.5, fireball.getZ() + vec3.z * 4.0);
 
-		fireball.setPosRaw(d0, d1, d2);
 		this.level().addFreshEntity(fireball);
 		this.setAttacking(false);
 	}

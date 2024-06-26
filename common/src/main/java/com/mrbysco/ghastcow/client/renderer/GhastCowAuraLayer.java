@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class GhastCowAuraLayer extends EnergySwirlLayer<GhastCow, GhastCowModel<GhastCow>> {
-	private static final ResourceLocation GHASTCOW_ARMOR = new ResourceLocation(Constants.MOD_ID, "textures/entity/ghastcow_armor.png");
+	private static final ResourceLocation GHASTCOW_ARMOR = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "textures/entity/ghastcow_armor.png");
 	private final GhastCowModel<GhastCow> model;
 
 	public GhastCowAuraLayer(RenderLayerParent<GhastCow, GhastCowModel<GhastCow>> parent, EntityModelSet modelSet) {

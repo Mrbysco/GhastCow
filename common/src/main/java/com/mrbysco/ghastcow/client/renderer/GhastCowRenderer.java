@@ -11,9 +11,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 
 public class GhastCowRenderer extends MobRenderer<GhastCow, GhastCowModel<GhastCow>> {
-	private static final ResourceLocation INVULNERABLE_GHASTCOW_TEXTURES = new ResourceLocation(Constants.MOD_ID, "textures/entity/ghastcow_invulnerable.png");
-	private static final ResourceLocation GHASTCOW_TEXTURES = new ResourceLocation(Constants.MOD_ID, "textures/entity/ghastcow.png");
-	private static final ResourceLocation GHASTCOW_SHOOTING_TEXTURES = new ResourceLocation(Constants.MOD_ID, "textures/entity/ghastcow_shooting.png");
+	private static final ResourceLocation INVULNERABLE_GHASTCOW_TEXTURES = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "textures/entity/ghastcow_invulnerable.png");
+	private static final ResourceLocation GHASTCOW_TEXTURES = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "textures/entity/ghastcow.png");
+	private static final ResourceLocation GHASTCOW_SHOOTING_TEXTURES = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "textures/entity/ghastcow_shooting.png");
 
 	public GhastCowRenderer(Context context) {
 		super(context, new GhastCowModel(context.bakeLayer(ClientClass.GHAST_COW)), 1.5F);

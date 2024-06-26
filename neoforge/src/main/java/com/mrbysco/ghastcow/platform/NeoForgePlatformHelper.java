@@ -12,7 +12,7 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
 
 	@Override
 	public boolean cancelMobGriefing(Level level, Entity entity) {
-		return EventHooks.getMobGriefingEvent(level, entity);
+		return EventHooks.canEntityGrief(level, entity);
 	}
 
 	@Override
