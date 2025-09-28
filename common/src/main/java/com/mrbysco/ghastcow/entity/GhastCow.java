@@ -10,6 +10,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -23,11 +24,10 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.PowerableMob;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -46,6 +46,7 @@ import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.LargeFireball;
+import net.minecraft.world.entity.projectile.windcharge.WindCharge;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -54,9 +55,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.List;
-import java.util.function.Predicate;
 
-public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttackMob {
+public class GhastCow extends FlyingMonster implements RangedAttackMob {
 	private static final EntityDataAccessor<Boolean> ATTACKING = SynchedEntityData.defineId(GhastCow.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Integer> INVULNERABILITY_TIME = SynchedEntityData.defineId(GhastCow.class, EntityDataSerializers.INT);
 	private static final EntityDataAccessor<Integer> TARGET = SynchedEntityData.defineId(GhastCow.class, EntityDataSerializers.INT);
@@ -64,7 +64,7 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 	private int idleUpdate = 0;
 
 	private final ServerBossEvent bossInfo = (ServerBossEvent) (new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.WHITE, BossEvent.BossBarOverlay.PROGRESS)).setCreateWorldFog(true);
-	private static final Predicate<LivingEntity> NOT_UNDEAD = (livingEntity) -> !livingEntity.getType().is(EntityTypeTags.UNDEAD) && !(livingEntity instanceof Cow) && livingEntity.attackable();
+	private static final TargetingConditions.Selector NOT_UNDEAD = (livingEntity, serverLevel) -> !livingEntity.getType().is(EntityTypeTags.UNDEAD) && !(livingEntity instanceof Cow) && livingEntity.attackable();
 	private static final TargetingConditions ENEMY_CONDITION = TargetingConditions.forCombat().range(20.0D).selector(NOT_UNDEAD);
 
 	public GhastCow(EntityType<? extends FlyingMonster> type, Level level) {
@@ -74,6 +74,7 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 		this.xpReward = 50;
 	}
 
+	@Override
 	protected void registerGoals() {
 		this.goalSelector.addGoal(0, new DoNothingGoal());
 		this.goalSelector.addGoal(2, new RangedAttackGoal(this, 1.0D, 40, 20.0F));
@@ -120,6 +121,7 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 		this.entityData.set(TARGET, newId);
 	}
 
+	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		this.setInvulTime(compound.getInt("Invul"));
@@ -128,11 +130,13 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 		}
 	}
 
+	@Override
 	public void setCustomName(@Nullable Component name) {
 		super.setCustomName(name);
 		this.bossInfo.setName(this.getDisplayName());
 	}
 
+	@Override
 	public void aiStep() {
 		Vec3 vec3 = this.getDeltaMovement().multiply(1.0D, 0.6D, 1.0D);
 		if (!this.level().isClientSide && this.getTargetID() > 0) {
@@ -178,15 +182,14 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 	}
 
 	@Override
-	protected void customServerAiStep() {
+	protected void customServerAiStep(ServerLevel level) {
 		if (this.getInvulnerableTicks() > 0) {
 			int j1 = this.getInvulnerableTicks() - 1;
 			if (j1 <= 0) {
-				Level.ExplosionInteraction explosion$mode = Services.PLATFORM.cancelMobGriefing(this.level(), this) ?
-						Level.ExplosionInteraction.MOB : Level.ExplosionInteraction.NONE;
-				this.level().explode(this, this.getX(), this.getEyeY(), this.getZ(), 7.0F, false, explosion$mode);
+				Level.ExplosionInteraction explosion$mode = Services.PLATFORM.cancelMobGriefing(level, this) ? Level.ExplosionInteraction.MOB : Level.ExplosionInteraction.NONE;
+				level.explode(this, this.getX(), this.getEyeY(), this.getZ(), 7.0F, false, explosion$mode);
 				if (!this.isSilent()) {
-					this.level().playSound(null, this.blockPosition(), SoundEvents.GHAST_SCREAM, getSoundCategory(), getSoundVolume(), 1.0F);
+					level.playSound(null, this.blockPosition(), SoundEvents.GHAST_SCREAM, getSoundCategory(), getSoundVolume(), 1.0F);
 				}
 			}
 
@@ -196,11 +199,11 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 			}
 
 		} else {
-			super.customServerAiStep();
+			super.customServerAiStep(level);
 
 			if (this.tickCount >= nextUpdate) {
 				this.nextUpdate = this.tickCount + 10 + this.random.nextInt(10);
-				if (this.level().getDifficulty() == Difficulty.NORMAL || this.level().getDifficulty() == Difficulty.HARD) {
+				if (level.getDifficulty() == Difficulty.NORMAL || level.getDifficulty() == Difficulty.HARD) {
 					int idleHeadUpdates = idleUpdate;
 					this.idleUpdate++;
 					if (idleHeadUpdates > 15) {
@@ -216,7 +219,7 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 
 				int targetID = this.getTargetID();
 				if (targetID > 0) {
-					Entity entity = this.level().getEntity(targetID);
+					Entity entity = level.getEntity(targetID);
 					if (entity != null && entity.isAlive() && !(this.distanceToSqr(entity) > 900.0D) && this.hasLineOfSight(entity)) {
 						if (entity instanceof Player && ((Player) entity).getAbilities().invulnerable) {
 							this.updateTargetID(0);
@@ -229,7 +232,7 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 						this.updateTargetID(0);
 					}
 				} else {
-					List<LivingEntity> list = this.level().getNearbyEntities(LivingEntity.class, ENEMY_CONDITION, this, this.getBoundingBox().inflate(20.0D, 8.0D, 20.0D));
+					List<LivingEntity> list = level.getNearbyEntities(LivingEntity.class, ENEMY_CONDITION, this, this.getBoundingBox().inflate(20.0D, 8.0D, 20.0D));
 
 					for (int j2 = 0; j2 < 10 && !list.isEmpty(); ++j2) {
 						LivingEntity livingentity = list.get(this.random.nextInt(list.size()));
@@ -263,11 +266,13 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 		}
 	}
 
+	@Override
 	public void startSeenByPlayer(ServerPlayer player) {
 		super.startSeenByPlayer(player);
 		this.bossInfo.addPlayer(player);
 	}
 
+	@Override
 	public void stopSeenByPlayer(ServerPlayer player) {
 		super.stopSeenByPlayer(player);
 		this.bossInfo.removePlayer(player);
@@ -277,22 +282,27 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 		return SoundSource.HOSTILE;
 	}
 
+	@Override
 	protected SoundEvent getAmbientSound() {
 		return SoundEvents.COW_AMBIENT;
 	}
 
+	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
 		return SoundEvents.COW_HURT;
 	}
 
+	@Override
 	protected SoundEvent getDeathSound() {
 		return SoundEvents.COW_DEATH;
 	}
 
+	@Override
 	protected float getSoundVolume() {
 		return 5.0F;
 	}
 
+	@Override
 	protected boolean canRide(Entity entityIn) {
 		return false;
 	}
@@ -302,7 +312,7 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 		return false;
 	}
 
-	public static boolean canSpawnHere(EntityType<GhastCow> entityType, LevelAccessor world, MobSpawnType reason, BlockPos pos, RandomSource random) {
+	public static boolean canSpawnHere(EntityType<GhastCow> entityType, LevelAccessor world, EntitySpawnReason reason, BlockPos pos, RandomSource random) {
 		return world.getDifficulty() != Difficulty.PEACEFUL && random.nextInt(20) == 0 && checkMobSpawnRules(entityType, world, reason, pos, random);
 	}
 
@@ -312,8 +322,8 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 	}
 
 	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		if (this.isInvulnerableTo(source)) {
+	public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
+		if (this.isInvulnerableTo(level, source)) {
 			return false;
 		} else if (!source.is(DamageTypeTags.WITHER_IMMUNE_TO) && !(source.getEntity() instanceof WitherBoss)) {
 			if (this.getInvulnerableTicks() > 0 && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
@@ -321,18 +331,17 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 			} else {
 				if (this.isPowered()) {
 					Entity entity = source.getDirectEntity();
-					if (entity instanceof AbstractArrow) {
+					if (entity instanceof AbstractArrow || entity instanceof WindCharge) {
 						return false;
 					}
 				}
 
 				Entity entity1 = source.getEntity();
-				if (entity1 != null && !(entity1 instanceof Player) && entity1 instanceof LivingEntity && entity1.getType().is(EntityTypeTags.UNDEAD)) {
+				if (entity1 != null && entity1.getType().is(EntityTypeTags.WITHER_FRIENDS)) {
 					return false;
 				} else {
 					this.idleUpdate += 3;
-
-					return super.hurt(source, amount);
+					return super.hurtServer(level, source, amount);
 				}
 			}
 		} else {
@@ -363,14 +372,13 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 		this.setAttacking(false);
 	}
 
-	@Override
 	public boolean isPowered() {
 		return this.getHealth() <= this.getMaxHealth() / 2.0F;
 	}
 
 	@Nullable
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor levelAccessor, DifficultyInstance difficultyIn, MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor levelAccessor, DifficultyInstance difficultyIn, EntitySpawnReason reason, @Nullable SpawnGroupData spawnDataIn) {
 		this.setInvulTime(220);
 		this.setHealth(this.getMaxHealth() / 2.0F);
 		return super.finalizeSpawn(levelAccessor, difficultyIn, reason, spawnDataIn);

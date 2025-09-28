@@ -3,6 +3,7 @@ package com.mrbysco.ghastcow.platform;
 import com.mrbysco.ghastcow.config.GhowConfig;
 import com.mrbysco.ghastcow.platform.services.IPlatformHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.event.EventHooks;
@@ -11,8 +12,8 @@ public class NeoForgePlatformHelper implements IPlatformHelper {
 
 
 	@Override
-	public boolean cancelMobGriefing(Level level, Entity entity) {
-		return EventHooks.canEntityGrief(level, entity);
+	public boolean cancelMobGriefing(ServerLevel serverLevel, Entity entity) {
+		return EventHooks.canEntityGrief(serverLevel, entity);
 	}
 
 	@Override

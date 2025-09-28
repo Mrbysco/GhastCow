@@ -1,6 +1,7 @@
 package com.mrbysco.ghastcow.client.model;
 
-import net.minecraft.client.model.HierarchicalModel;
+import com.mrbysco.ghastcow.client.GhastCowRenderState;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
@@ -8,23 +9,21 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 
 import java.util.Random;
 
-public class GhastCowModel<T extends Entity> extends HierarchicalModel<T> {
-	private final ModelPart root;
+public class GhastCowModel extends EntityModel<GhastCowRenderState> {
 	private final ModelPart head;
 	private final ModelPart body;
 	private final ModelPart[] tentacles = new ModelPart[9];
 
-	public GhastCowModel(ModelPart part) {
-		this.root = part;
-		this.head = part.getChild("head");
-		this.body = part.getChild("body");
+	public GhastCowModel(ModelPart root) {
+		super(root);
+		this.head = root.getChild("head");
+		this.body = root.getChild("body");
 
 		for (int i = 0; i < this.tentacles.length; ++i) {
-			this.tentacles[i] = part.getChild(createTentacleName(i));
+			this.tentacles[i] = root.getChild(createTentacleName(i));
 		}
 	}
 
@@ -71,13 +70,10 @@ public class GhastCowModel<T extends Entity> extends HierarchicalModel<T> {
 	}
 
 	@Override
-	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(GhastCowRenderState renderState) {
+		super.setupAnim(renderState);
 		for (int i = 0; i < this.tentacles.length; ++i) {
-			this.tentacles[i].xRot = 0.2F * Mth.sin(ageInTicks * 0.3F + (float) i) + 0.4F;
+			this.tentacles[i].xRot = 0.2F * Mth.sin(renderState.ageInTicks * 0.3F + (float) i) + 0.4F;
 		}
-	}
-
-	public ModelPart root() {
-		return this.root;
 	}
 }

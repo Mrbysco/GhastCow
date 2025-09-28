@@ -6,6 +6,7 @@ import com.mrbysco.ghastcow.registration.ModEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.entity.monster.Ghast;
@@ -28,7 +29,7 @@ public class CommonClass {
 					if (!Services.PLATFORM.requiresName() ||
 							(cowEntity.hasCustomName() && cowEntity.getCustomName() != null && cowEntity.getCustomName().getString().toLowerCase(Locale.ROOT).equals("ghast"))) {
 						BlockPos blockpos = cowEntity.blockPosition();
-						GhastCow ghastCow = ModEntities.GHAST_COW.get().create(level);
+						GhastCow ghastCow = ModEntities.GHAST_COW.get().create(level, EntitySpawnReason.MOB_SUMMONED);
 						if (ghastCow != null) {
 							ghastCow.moveTo((double) blockpos.getX() + 0.5D, (double) blockpos.getY() + 1.55D, (double) blockpos.getZ() + 0.5D, cowEntity.getYRot(), cowEntity.getXRot());
 							ghastCow.yBodyRot = cowEntity.yBodyRot;
