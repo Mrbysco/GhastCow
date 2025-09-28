@@ -50,6 +50,7 @@ import net.minecraft.world.entity.projectile.windcharge.WindCharge;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -122,9 +123,9 @@ public class GhastCow extends FlyingMonster implements RangedAttackMob {
 	}
 
 	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		this.setInvulTime(compound.getIntOr("Invul", 0));
+	protected void readAdditionalSaveData(ValueInput input) {
+		super.readAdditionalSaveData(input);
+		this.setInvulTime(input.getIntOr("Invul", 0));
 		if (this.hasCustomName()) {
 			this.bossInfo.setName(this.getDisplayName());
 		}
