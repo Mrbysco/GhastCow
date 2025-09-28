@@ -15,13 +15,16 @@ public abstract class FlyingMonster extends Monster {
 		super(type, level);
 	}
 
-	public boolean causeFallDamage(float distance, float damageMultiplier, DamageSource source) {
+	@Override
+	public boolean causeFallDamage(double distance, float damageMultiplier, DamageSource source) {
 		return false;
 	}
 
+	@Override
 	protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
 	}
 
+	@Override
 	public void travel(Vec3 travelVector) {
 		if (this.isInWater()) {
 			this.moveRelative(0.02F, travelVector);
@@ -56,6 +59,7 @@ public abstract class FlyingMonster extends Monster {
 	 * Returns true if this entity should move as if it were on a ladder (either because it's actually on a ladder, or
 	 * for AI reasons)
 	 */
+	@Override
 	public boolean onClimbable() {
 		return false;
 	}

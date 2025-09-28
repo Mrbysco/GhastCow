@@ -31,7 +31,7 @@ public class CommonClass {
 						BlockPos blockpos = cowEntity.blockPosition();
 						GhastCow ghastCow = ModEntities.GHAST_COW.get().create(level, EntitySpawnReason.MOB_SUMMONED);
 						if (ghastCow != null) {
-							ghastCow.moveTo((double) blockpos.getX() + 0.5D, (double) blockpos.getY() + 1.55D, (double) blockpos.getZ() + 0.5D, cowEntity.getYRot(), cowEntity.getXRot());
+							ghastCow.snapTo((double) blockpos.getX() + 0.5D, (double) blockpos.getY() + 1.55D, (double) blockpos.getZ() + 0.5D, cowEntity.getYRot(), cowEntity.getXRot());
 							ghastCow.yBodyRot = cowEntity.yBodyRot;
 
 							level.addFreshEntity(ghastCow);

@@ -124,7 +124,7 @@ public class GhastCow extends FlyingMonster implements RangedAttackMob {
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		this.setInvulTime(compound.getInt("Invul"));
+		this.setInvulTime(compound.getIntOr("Invul", 0));
 		if (this.hasCustomName()) {
 			this.bossInfo.setName(this.getDisplayName());
 		}
