@@ -297,7 +297,8 @@ public class GhastCow extends FlyingMonster implements PowerableMob, RangedAttac
 		return false;
 	}
 
-	public boolean canChangeDimensions() {
+	@Override
+	public boolean canUsePortal(boolean allowPassengers) {
 		return false;
 	}
 
