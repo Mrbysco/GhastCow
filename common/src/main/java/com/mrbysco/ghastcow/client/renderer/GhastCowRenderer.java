@@ -9,13 +9,13 @@ import com.mrbysco.ghastcow.entity.GhastCow;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 
 public class GhastCowRenderer extends MobRenderer<GhastCow, GhastCowRenderState, GhastCowModel> {
-	private static final ResourceLocation INVULNERABLE_GHASTCOW_TEXTURES = Constants.modLoc("textures/entity/ghastcow_invulnerable.png");
-	private static final ResourceLocation GHASTCOW_TEXTURES = Constants.modLoc("textures/entity/ghastcow.png");
-	private static final ResourceLocation GHASTCOW_SHOOTING_TEXTURES = Constants.modLoc("textures/entity/ghastcow_shooting.png");
+	private static final Identifier INVULNERABLE_GHASTCOW_TEXTURES = Constants.modLoc("textures/entity/ghastcow_invulnerable.png");
+	private static final Identifier GHASTCOW_TEXTURES = Constants.modLoc("textures/entity/ghastcow.png");
+	private static final Identifier GHASTCOW_SHOOTING_TEXTURES = Constants.modLoc("textures/entity/ghastcow_shooting.png");
 
 	public GhastCowRenderer(Context context) {
 		super(context, new GhastCowModel(context.bakeLayer(ClientClass.GHAST_COW)), 1.5F);
@@ -41,7 +41,7 @@ public class GhastCowRenderer extends MobRenderer<GhastCow, GhastCowRenderState,
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(GhastCowRenderState renderState) {
+	public Identifier getTextureLocation(GhastCowRenderState renderState) {
 		int i = Mth.floor(renderState.invulnerableTicks);
 		return i > 0 && (i > 80 || i / 5 % 2 != 1) ?
 				INVULNERABLE_GHASTCOW_TEXTURES :

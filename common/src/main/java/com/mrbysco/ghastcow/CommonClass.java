@@ -8,9 +8,9 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.animal.Cow;
+import net.minecraft.world.entity.animal.cow.Cow;
 import net.minecraft.world.entity.monster.Ghast;
-import net.minecraft.world.entity.projectile.LargeFireball;
+import net.minecraft.world.entity.projectile.hurtingprojectile.LargeFireball;
 import net.minecraft.world.level.Level;
 
 import java.util.Locale;
@@ -22,7 +22,7 @@ public class CommonClass {
 
 	public static void onDeath(LivingEntity livingEntity, DamageSource source) {
 		final Level level = livingEntity.level();
-		if (!level.isClientSide) {
+		if (!level.isClientSide()) {
 			Entity directEntity = source.getDirectEntity();
 			if (directEntity instanceof LargeFireball fireball) {
 				if (fireball.getOwner() instanceof Ghast && livingEntity instanceof Cow cowEntity) {

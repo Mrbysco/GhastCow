@@ -7,11 +7,11 @@ import com.mrbysco.ghastcow.client.model.GhastCowModel;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.EnergySwirlLayer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 
 public class GhastCowAuraLayer extends EnergySwirlLayer<GhastCowRenderState, GhastCowModel> {
-	private static final ResourceLocation GHASTCOW_ARMOR = Constants.modLoc("textures/entity/ghastcow_armor.png");
+	private static final Identifier GHASTCOW_ARMOR = Constants.modLoc("textures/entity/ghastcow_armor.png");
 	private final GhastCowModel model;
 
 	public GhastCowAuraLayer(RenderLayerParent<GhastCowRenderState, GhastCowModel> parent, EntityModelSet modelSet) {
@@ -30,7 +30,7 @@ public class GhastCowAuraLayer extends EnergySwirlLayer<GhastCowRenderState, Gha
 	}
 
 	@Override
-	protected ResourceLocation getTextureLocation() {
+	protected Identifier getTextureLocation() {
 		return GHASTCOW_ARMOR;
 	}
 
