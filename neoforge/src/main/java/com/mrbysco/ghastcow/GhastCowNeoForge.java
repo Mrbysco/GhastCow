@@ -18,7 +18,6 @@ public class GhastCowNeoForge {
 
 	public GhastCowNeoForge(IEventBus eventBus, Dist dist, ModContainer container) {
 		container.registerConfig(ModConfig.Type.COMMON, GhowConfig.commonSpec);
-		eventBus.register(GhowConfig.class);
 
 		CommonClass.init();
 

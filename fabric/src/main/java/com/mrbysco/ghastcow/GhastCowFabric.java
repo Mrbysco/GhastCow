@@ -1,22 +1,20 @@
 package com.mrbysco.ghastcow;
 
 import com.mrbysco.ghastcow.callback.LivingDeathCallback;
-import com.mrbysco.ghastcow.config.GhowConfigFabric;
+import com.mrbysco.ghastcow.config.GhowConfig;
 import com.mrbysco.ghastcow.entity.GhastCow;
 import com.mrbysco.ghastcow.registration.ModEntities;
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.ConfigHolder;
-import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
+import fuzs.forgeconfigapiport.fabric.api.v5.ConfigRegistry;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.world.InteractionResult;
+import net.neoforged.fml.config.ModConfig;
 
 public class GhastCowFabric implements ModInitializer {
-	public static ConfigHolder<GhowConfigFabric> config;
 
 	@Override
 	public void onInitialize() {
-		config = AutoConfig.register(GhowConfigFabric.class, Toml4jConfigSerializer::new);
+		ConfigRegistry.INSTANCE.register(Constants.MOD_ID, ModConfig.Type.COMMON, GhowConfig.commonSpec);
 
 		CommonClass.init();
 

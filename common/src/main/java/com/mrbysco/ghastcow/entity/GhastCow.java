@@ -18,6 +18,7 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.util.Util;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
@@ -39,6 +40,8 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.cow.Cow;
+import net.minecraft.world.entity.animal.cow.CowSoundVariant;
+import net.minecraft.world.entity.animal.cow.CowSoundVariants;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
@@ -63,8 +66,12 @@ public class GhastCow extends FlyingMonster implements RangedAttackMob {
 	private int nextUpdate = 0;
 	private int idleUpdate = 0;
 
-	private final ServerBossEvent bossInfo = (ServerBossEvent) (new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.WHITE, BossEvent.BossBarOverlay.PROGRESS)).setCreateWorldFog(true);
-	private static final TargetingConditions.Selector NOT_UNDEAD = (livingEntity, serverLevel) -> !livingEntity.getType().is(EntityTypeTags.UNDEAD) && !(livingEntity instanceof Cow) && livingEntity.attackable();
+	private final ServerBossEvent bossInfo = Util.make(
+			new ServerBossEvent(Mth.createInsecureUUID(this.random), this.getDisplayName(), BossEvent.BossBarColor.WHITE, BossEvent.BossBarOverlay.PROGRESS),
+			e -> e.setCreateWorldFog(true)
+	);
+
+	private static final TargetingConditions.Selector NOT_UNDEAD = (livingEntity, serverLevel) -> !livingEntity.is(EntityTypeTags.UNDEAD) && !(livingEntity instanceof Cow) && livingEntity.attackable();
 	private static final TargetingConditions ENEMY_CONDITION = TargetingConditions.forCombat().range(20.0D).selector(NOT_UNDEAD);
 
 	public GhastCow(EntityType<? extends FlyingMonster> type, Level level) {
@@ -170,7 +177,7 @@ public class GhastCow extends FlyingMonster implements RangedAttackMob {
 		double d10 = this.getY();
 		double d2 = this.getZ();
 		this.level().addParticle(ParticleTypes.POOF, d8 + this.random.nextGaussian() * (double) 0.3F, d10 + this.random.nextGaussian() * (double) 0.3F, d2 + this.random.nextGaussian() * (double) 0.3F, 0.0D, 0.0D, 0.0D);
-		if (flag && this.level().random.nextInt(4) == 0) {
+		if (flag && this.level().getRandom().nextInt(4) == 0) {
 			this.level().addParticle(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0.7F, 0.7F, 0.5F), d8 + this.random.nextGaussian() * (double) 0.3F, d10 + this.random.nextGaussian() * (double) 0.3F, d2 + this.random.nextGaussian() * (double) 0.3F, 0.0, 0.0, 0.0);
 		}
 
@@ -284,17 +291,21 @@ public class GhastCow extends FlyingMonster implements RangedAttackMob {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return SoundEvents.COW_AMBIENT;
+		return this.getSoundSet().ambientSound().value();
 	}
 
 	@Override
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-		return SoundEvents.COW_HURT;
+	protected SoundEvent getHurtSound(DamageSource source) {
+		return this.getSoundSet().hurtSound().value();
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundEvents.COW_DEATH;
+		return this.getSoundSet().deathSound().value();
+	}
+
+	protected CowSoundVariant getSoundSet() {
+		return SoundEvents.COW_SOUNDS.get(CowSoundVariants.SoundSet.CLASSIC);
 	}
 
 	@Override
@@ -337,7 +348,7 @@ public class GhastCow extends FlyingMonster implements RangedAttackMob {
 				}
 
 				Entity entity1 = source.getEntity();
-				if (entity1 != null && entity1.getType().is(EntityTypeTags.WITHER_FRIENDS)) {
+				if (entity1 != null && entity1.is(EntityTypeTags.WITHER_FRIENDS)) {
 					return false;
 				} else {
 					this.idleUpdate += 3;

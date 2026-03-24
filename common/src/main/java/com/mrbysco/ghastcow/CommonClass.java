@@ -1,7 +1,7 @@
 package com.mrbysco.ghastcow;
 
+import com.mrbysco.ghastcow.config.GhowConfig;
 import com.mrbysco.ghastcow.entity.GhastCow;
-import com.mrbysco.ghastcow.platform.Services;
 import com.mrbysco.ghastcow.registration.ModEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
@@ -26,7 +26,7 @@ public class CommonClass {
 			Entity directEntity = source.getDirectEntity();
 			if (directEntity instanceof LargeFireball fireball) {
 				if (fireball.getOwner() instanceof Ghast && livingEntity instanceof Cow cowEntity) {
-					if (!Services.PLATFORM.requiresName() ||
+					if (!GhowConfig.COMMON.requireNamed.get() ||
 							(cowEntity.hasCustomName() && cowEntity.getCustomName() != null && cowEntity.getCustomName().getString().toLowerCase(Locale.ROOT).equals("ghast"))) {
 						BlockPos blockpos = cowEntity.blockPosition();
 						GhastCow ghastCow = ModEntities.GHAST_COW.get().create(level, EntitySpawnReason.MOB_SUMMONED);

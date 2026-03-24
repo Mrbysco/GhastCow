@@ -16,11 +16,4 @@ public interface IPlatformHelper {
 	 * Get the friction of the block
 	 */
 	float getBlockFriction(Level level, BlockPos ground, Entity entity);
-
-	/**
-	 * If the cow needs to be called 'ghast'
-	 *
-	 * @return the configured option for `requireNamed`
-	 */
-	boolean requiresName();
 }
