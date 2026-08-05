@@ -20,6 +20,7 @@ neoForge {
     if (at.exists()) {
         accessTransformers.from(at.absolutePath)
     }
+    def commonResources = project(':common').file("src/main/resources")
 
     runs {
         configureEach { model ->
@@ -40,6 +41,18 @@ neoForge {
         server {
             server()
             programArgument '--nogui'
+        }
+
+        data {
+            clientData()
+
+            programArguments.addAll(
+                    '--mod', "${mod_id}",
+                    '--all',
+                    '--output', file('src/generated/resources/').getAbsolutePath(),
+                    '--existing', file('src/main/resources/').getAbsolutePath(),
+                    '--existing', commonResources.getAbsolutePath()
+            )
         }
     }
 

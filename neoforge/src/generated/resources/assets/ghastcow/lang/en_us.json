@@ -1,0 +1,7 @@
+{
+  "entity.ghastcow.ghast_cow": "Ghast Cow",
+  "ghastcow.configuration.requireNamed": "Require Named",
+  "ghastcow.configuration.requireNamed.tooltip": "When enabled requires the cow to be renamed to \"ghast\" before getting killed by a ghast",
+  "ghastcow.configuration.summon": "Summon",
+  "ghastcow.configuration.summon.tooltip": "Summon Settings"
+}
